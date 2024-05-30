@@ -1,6 +1,14 @@
 from bs4 import BeautifulSoup
 
+# # test
+# name = "CDR_TestSet.BioC.xml"
+# write_file_name = "test"
+
+
+# train
 name = "CDR_TrainingSet.BioC.xml"
+write_file_name = "train"
+
 
 def children(bs):
     children = bs.find_all(recursive = False)
@@ -92,7 +100,7 @@ for doc in documents:
         jrel.append({"rel_type":rel_type, "chemical":chemical, "disease":disease})
 
     # write .PubTator.txt  file
-    with open('train.PubTator.txt', "a") as fh:
+    with open(f'{write_file_name}.PubTator.txt', "a") as fh:
         id = jdoc['id']
         title_split = jdoc['title'].split("\n")
         abstract_split = jdoc['abstract'].split("\n")
@@ -109,7 +117,7 @@ for doc in documents:
         abstract = separator.join(abstract_edited)
         title = separator.join(title_edited)
 
-        fh.write(f"\n\n{id}|t|{title}{abstract}")
+        fh.write(f"{id}|t|{title}{abstract}")
         for rel in jrel:
             
             type = rel['rel_type']
@@ -125,16 +133,4 @@ for doc in documents:
             chem = chem_dic['name']
             disease = disease_dic['name']
             fh.write(f"\n{id}\t{type}\t{chem}\t{disease}")
-
-    
-
-    
-    
-    
-    
-    
-    
-    
-    # if id == '2234245':
-    #     print(anno_dic)
-
+        fh.write("\n\n")
