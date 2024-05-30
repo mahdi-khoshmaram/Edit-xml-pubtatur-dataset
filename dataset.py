@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-
+name = "CDR_TrainingSet.BioC.xml"
 
 def children(bs):
     children = bs.find_all(recursive = False)
@@ -8,9 +8,6 @@ def children(bs):
     for child in children:
         child_list.append(child.name)
     return child_list
-
-
-name = "CDR_TrainingSet.BioC.xml"
 
 
 # read .xml file
@@ -97,9 +94,22 @@ for doc in documents:
     # write .PubTator.txt  file
     with open('train.PubTator.txt', "a") as fh:
         id = jdoc['id']
-        title = jdoc['title']
-        abstract = jdoc['abstract']
-        fh.write(f"\n\n{id}|t|{title} {abstract}")
+        title_split = jdoc['title'].split("\n")
+        abstract_split = jdoc['abstract'].split("\n")
+
+        abstract_edited = []
+        title_edited = []
+
+        for part in abstract_split:
+            abstract_edited.append(part.strip())
+        for part in title_split:
+            title_edited.append(part.strip())
+
+        separator = '' 
+        abstract = separator.join(abstract_edited)
+        title = separator.join(title_edited)
+
+        fh.write(f"\n\n{id}|t|{title}{abstract}")
         for rel in jrel:
             
             type = rel['rel_type']
