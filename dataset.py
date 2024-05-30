@@ -59,9 +59,9 @@ for doc in documents:
         annotations = psg.find_all("annotation", recursive = False)
         for anno in annotations:
             Multi = False
-            print(anno.find(attrs = {"key":"CompositeRole"}, recursive = False))
-            if anno.find(attrs = {"key":"CompositeRole"}, recursive = False).string == 'CompositeMention':
-                continue
+            if anno.find(attrs = {"key":"CompositeRole"}, recursive = False):
+                if anno.find(attrs = {"key":"CompositeRole"}, recursive = False).string == 'CompositeMention':
+                    continue
             
             mesh = anno.find(attrs={"key": "MESH"}, recursive = False).string
             en_type = anno.find(attrs={"key": "type"}, recursive = False).string
@@ -76,7 +76,7 @@ for doc in documents:
                     if mesh in anno_dic.keys():
                         continue
                     anno_dic[mesh] = {'type':en_type, 'name':en_name}
-                break
+                continue
 
             if mesh in anno_dic.keys():
                 continue
@@ -94,13 +94,17 @@ for doc in documents:
 
         jrel.append({"rel_type":rel_type, "chemical":chemical, "disease":disease})
 
-    # # write .PubTator.txt  file
-    # with open('train.PubTator.txt', "a") as fh:
-    #     id = jdoc['id']
-    #     title = jdoc['title']
-    #     abstract = jdoc['abstract']
-    #     fh.write(f"{id}|t|{title} {abstract}")
-    #     fh.write
+    # write .PubTator.txt  file
+    with open('train.PubTator.txt', "a") as fh:
+        id = jdoc['id']
+        title = jdoc['title']
+        abstract = jdoc['abstract']
+        fh.write(f"{id}|t|{title} {abstract}")
+        for rel in jrel:
+            type = rel['rel_type']
+            chem = rel['chemical']
+            disease = rel["disease"]
+            fh.write(f"{id}\t{type}\t{chem}\t{disease}")
     
 
     
