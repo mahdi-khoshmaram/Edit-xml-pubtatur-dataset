@@ -99,12 +99,23 @@ for doc in documents:
         id = jdoc['id']
         title = jdoc['title']
         abstract = jdoc['abstract']
-        fh.write(f"{id}|t|{title} {abstract}")
+        fh.write(f"\n\n{id}|t|{title} {abstract}")
         for rel in jrel:
+            
             type = rel['rel_type']
-            chem = rel['chemical']
-            disease = rel["disease"]
-            fh.write(f"{id}\t{type}\t{chem}\t{disease}")
+            chem_dic = rel['chemical']
+            disease_dic = rel["disease"]
+
+            if chem_dic['type'] != "Chemical":
+                print("ERROR!")
+                break
+            if disease_dic['type'] != "Disease":
+                print("ERROR!")
+                break 
+            chem = chem_dic['name']
+            disease = disease_dic['name']
+            fh.write(f"\n{id}\t{type}\t{chem}\t{disease}")
+
     
 
     
